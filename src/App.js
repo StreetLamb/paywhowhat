@@ -163,6 +163,7 @@ class App extends Component {
     return (
       <div className='page'>
         <div className='interactions'>
+        <h1>Splitting bills made easy</h1>
           <DetailsInput
             nameInput={nameInput}
             costInput={costInput}
