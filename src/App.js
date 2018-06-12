@@ -273,6 +273,7 @@ const DetailsInput=({nameInput,costInput,onNameChange,onCostChange,onSubmit,chil
     Cost:
     <input
       type='number'
+      step="0.01"
       value={costInput}
       onChange={onCostChange}
     />
