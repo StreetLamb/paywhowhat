@@ -124,7 +124,7 @@ class App extends Component {
       results[key].visits.forEach(item=>{
         finalprice+=Number(item.price);
       });
-      if(finalprice===0){
+      if(finalprice===0 && results[key].visits.length==0){
         const finalResult=final;
         delete finalResult[key];
         this.setState({final:finalResult},()=>this.calculateFinal());
@@ -264,22 +264,22 @@ const FinalTable=({pay,top,positive})=>
 
 const DetailsInput=({nameInput,costInput,onNameChange,onCostChange,onSubmit,children})=>
   <form onSubmit={onSubmit}>
-    Name:
-    <input
-      type='text'
-      value={nameInput}
-      onChange={onNameChange}
-    />
-    Cost:
-    <input
-      type='number'
-      step="0.01"
-      value={costInput}
-      onChange={onCostChange}
-    />
-    <button type='submit'>
-      {children}
-    </button>
+      <span>Name:</span>
+      <input
+        type='text'
+        value={nameInput}
+        onChange={onNameChange}
+      />
+      <span>Cost:</span>
+      <input
+        type='number'
+        step="0.01"
+        value={costInput}
+        onChange={onCostChange}
+      />
+      <button type='submit'>
+        {children}
+      </button>
   </form>
 
 export default App;
