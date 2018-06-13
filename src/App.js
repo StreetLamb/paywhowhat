@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 // const list={
@@ -124,7 +123,7 @@ class App extends Component {
       results[key].visits.forEach(item=>{
         finalprice+=Number(item.price);
       });
-      if(finalprice===0 && results[key].visits.length==0){
+      if(finalprice===0 && results[key].visits.length===0){
         const finalResult=final;
         delete finalResult[key];
         this.setState({final:finalResult},()=>this.calculateFinal());
@@ -196,10 +195,10 @@ const Table=({results,onDismiss,pay})=>
     <div className='table'>
       {Object.keys(pay).length!==0 &&
         <div className='table-header'>
-          <span style={{width:'48%'}}>
+          <span style={{width:'50%'}}>
             Name
           </span>
-          <span style={{width:'52%'}}>
+          <span style={{width:'50%'}}>
           Paid
           </span>
         </div>
@@ -246,7 +245,7 @@ const FinalTable=({pay,top,positive})=>
         <div>
           <div>
             {
-              item!==top()&& !positive().includes(item)&&
+              item!==top()&& !positive().includes(item)&& pay[item]!==0&&
               <span style={{width:'50%'}}>{item} pays ${-pay[item].toFixed(2)} to {top()}</span>
             }
           </div>
