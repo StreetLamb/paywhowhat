@@ -247,7 +247,7 @@ const FinalTable=({pay,top,positive})=>
           <div>
             {
               item!==top()&& !positive().includes(item)&& pay[item]!==0&&
-              <span style={{width:'50%'}}>{item.toUpperCase()} pays ${-pay[item].toFixed(2)} to {top().toUpperCase()}</span>
+              <span style={{width:'50%'}}>{item} --- ${-pay[item].toFixed(2)} ---> {top()}</span>
             }
           </div>
 
@@ -255,7 +255,7 @@ const FinalTable=({pay,top,positive})=>
             {
               item===top() && positive().filter(j=>j!==item).map(i=>
                 <div>
-                  <span style={{width:'50%'}}>{item.toUpperCase()} pays ${pay[i].toFixed(2)} to {i.toUpperCase()}</span>
+                  <span style={{width:'50%'}}>{item} --- ${pay[i].toFixed(2)} ---> {i}</span>
                 </div>
               )
             }
