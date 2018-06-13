@@ -97,7 +97,6 @@ class App extends Component {
 
   onSubmit(event){
     const {name,cost}=this.state;
-
     this.setDetail(name,cost);
 
     event.preventDefault();
@@ -116,26 +115,25 @@ class App extends Component {
   }
 
   getTotalEach(){
-    var finalprice=0;
     const{results,final}=this.state;
+    var myfinal=final;
 
     Object.keys(results).forEach((key,index)=>{
+      var finalprice=0;
       results[key].visits.forEach(item=>{
         finalprice+=Number(item.price);
       });
       if(finalprice===0 && results[key].visits.length===0){
-        const finalResult=final;
-        delete finalResult[key];
-        this.setState({final:finalResult},()=>this.calculateFinal());
+        delete myfinal[key];
       }else{
-        this.setState({final:{
-          ...final,
+        myfinal={
+          ...myfinal,
           [key]:finalprice,
-          }
-        },()=>this.calculateFinal());
+        }
        }
-       finalprice=0;
      })
+     this.setState({final:myfinal},()=>this.calculateFinal()
+     );
   }
 
   calculateFinal(){
@@ -249,7 +247,7 @@ const FinalTable=({pay,top,positive})=>
           <div>
             {
               item!==top()&& !positive().includes(item)&& pay[item]!==0&&
-              <span style={{width:'50%'}}>{item} pays ${-pay[item].toFixed(2)} to {top()}</span>
+              <span style={{width:'50%'}}>{item.toUpperCase()} pays ${-pay[item].toFixed(2)} to {top().toUpperCase()}</span>
             }
           </div>
 
@@ -257,7 +255,7 @@ const FinalTable=({pay,top,positive})=>
             {
               item===top() && positive().filter(j=>j!==item).map(i=>
                 <div>
-                  <span style={{width:'50%'}}>{item} pays ${pay[i].toFixed(2)} to {i}</span>
+                  <span style={{width:'50%'}}>{item.toUpperCase()} pays ${pay[i].toFixed(2)} to {i.toUpperCase()}</span>
                 </div>
               )
             }
