@@ -183,6 +183,7 @@ class App extends Component {
           ?this.setState({results:{}})
           :<Table
             results={results}
+            pay={pay}
             onDismiss={this.onDismiss}
            />
          }
@@ -191,16 +192,18 @@ class App extends Component {
   }
 }
 
-const Table=({results,onDismiss})=>
+const Table=({results,onDismiss,pay})=>
     <div className='table'>
-      <div className='table-header'>
-        <span style={{width:'48%'}}>
-          Name
-        </span>
-        <span style={{width:'52%'}}>
-        Paid
-        </span>
-      </div>
+      {Object.keys(pay).length!==0 &&
+        <div className='table-header'>
+          <span style={{width:'48%'}}>
+            Name
+          </span>
+          <span style={{width:'52%'}}>
+          Paid
+          </span>
+        </div>
+      }
       {
           Object.keys(results).map((key,index)=>
             results[key].visits.map(item=>
@@ -264,14 +267,14 @@ const FinalTable=({pay,top,positive})=>
 
 const DetailsInput=({nameInput,costInput,onNameChange,onCostChange,onSubmit,children})=>
   <form onSubmit={onSubmit}>
-      <span>Name:</span>
       <input
+        placeholder='Name'
         type='text'
         value={nameInput}
         onChange={onNameChange}
       />
-      <span>Cost:</span>
       <input
+        placeholder='Cost'
         type='number'
         step="0.01"
         value={costInput}
