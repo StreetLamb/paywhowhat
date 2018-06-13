@@ -195,11 +195,14 @@ const Table=({results,onDismiss,pay})=>
     <div className='table'>
       {Object.keys(pay).length!==0 &&
         <div className='table-header'>
-          <span style={{width:'50%'}}>
+          <span style={{width:'33%'}}>
             Name
           </span>
-          <span style={{width:'50%'}}>
+          <span style={{width:'33%'}}>
           Paid
+          </span>
+          <span style={{width:'33%'}}>
+          Delete
           </span>
         </div>
       }
@@ -207,13 +210,13 @@ const Table=({results,onDismiss,pay})=>
           Object.keys(results).map((key,index)=>
             results[key].visits.map(item=>
               <div key={item.id} className='table-row'>
-                <span style={{width:'50%'}}>
+                <span style={{width:'33%'}}>
                   {key}
                 </span>
-                <span style={{width:'50%'}}>
+                <span style={{width:'33%'}}>
                   ${item.price}
                 </span>
-                <span>
+                <span style={{width:'33%'}}>
                   <Button
                     onClick={()=> onDismiss(item.id,key)}
                     className="button-inline"
