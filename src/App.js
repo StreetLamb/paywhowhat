@@ -170,6 +170,8 @@ class App extends Component {
   }
 
   componentWillMount(){
+    document.title = "paywhowhat: Splitting bills made easy!"
+
     const cacheResults=localStorage.getItem('myResults');
 
     if(cacheResults){
@@ -184,7 +186,6 @@ class App extends Component {
     const {nameInput, costInput,results,pay}=this.state;
     return (
       <div className='page'>
-        <title>paywhowhat</title>
         <div className='interactions'>
         <h1>Splitting Bills Made Easy</h1>
           <DetailsInput
