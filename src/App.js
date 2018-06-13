@@ -14,6 +14,8 @@ class App extends Component {
   constructor(props){
     super(props);
 
+
+
     this.state={
       name:'',
       cost:'',
@@ -32,6 +34,13 @@ class App extends Component {
     this.calculateFinal=this.calculateFinal.bind(this);
     this.findTop=this.findTop.bind(this);
     this.findPositive=this.findPositive.bind(this);
+    this.onSetResult=this.onSetResult.bind(this);
+
+
+  }
+
+  onSetResult=(results,key)=>{
+    localStorage.setItem(key,JSON.stringify(results));
   }
 
   findTop(){
@@ -69,7 +78,10 @@ class App extends Component {
         ...results,
         [key]:{visits:updatedResults}
       }
-    },()=>this.getTotalEach());
+    },()=>{
+      this.onSetResult(this.state.results,'myResults');
+      this.getTotalEach();
+    });
   }
 
   setDetail(name,cost){
@@ -91,8 +103,10 @@ class App extends Component {
       },
       index:index+1
 
-    },()=>this.getTotalEach());
-
+    },()=>{
+      this.onSetResult(this.state.results,'myResults');
+      this.getTotalEach();
+    });
   }
 
   onSubmit(event){
@@ -155,7 +169,18 @@ class App extends Component {
 
   }
 
+  componentWillMount(){
+    const cacheResults=localStorage.getItem('myResults');
+
+    if(cacheResults){
+      this.setState({
+        results:JSON.parse(cacheResults)
+      },()=>this.getTotalEach());
+    }
+  }
+
   render() {
+
     const {nameInput, costInput,results,pay}=this.state;
     return (
       <div className='page'>
