@@ -185,7 +185,7 @@ class App extends Component {
     return (
       <div className='page'>
         <div className='interactions'>
-        <h1>Splitting bills made easy</h1>
+        <h1>Splitting Bills Made Easy</h1>
           <DetailsInput
             nameInput={nameInput}
             costInput={costInput}
@@ -293,12 +293,14 @@ const FinalTable=({pay,top,positive})=>
 const DetailsInput=({nameInput,costInput,onNameChange,onCostChange,onSubmit,children})=>
   <form onSubmit={onSubmit}>
       <input
+        required="required"
         placeholder='Name'
         type='text'
         value={nameInput}
         onChange={onNameChange}
       />
       <input
+        required="required"
         placeholder='Cost'
         type='number'
         step="0.01"
