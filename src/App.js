@@ -1,29 +1,210 @@
+//reset button doesnt work
+
 import React, { Component } from 'react';
 import './App.css';
+import styled from 'styled-components';
 
-// const list={
-//   jerron:{
-//     visits:[
-//       {price:10, id:0}
-//     ]
-//   }
-// };
+/*
+grape=#94618e
+eggplant=#49274A
+sand=#F4DECB
+shell=#F8EEE7
+*/
+/*
+terra=#945D60
+herb=#626E60
+chili=#AF473C
+charcoal=#3c3c3c
+*/
+const initialState={
+  name:'',
+  cost:'',
+  results:{},
+  index:0,
+  final:{},
+  pay:{},
+  gst:false,
+  service:false,
+};
+
+const Table=({results,onDismiss,pay})=>
+    <div className='table'>
+      {Object.keys(pay).length!==0 &&
+        <StyledTableDiv>
+          <span style={{width:'33%'}}>
+            Name
+          </span>
+          <span style={{width:'33%'}}>
+          Paid
+          </span>
+          <span style={{width:'33%'}}>
+          Delete
+          </span>
+        </StyledTableDiv>
+      }
+      {
+          Object.keys(results).map((key,index)=>
+            results[key].visits.map(item=>
+              <StyledRowDiv>
+                <span style={{width:'33%'}}>
+                  {key}
+                </span>
+                <span style={{width:'33%'}}>
+                  ${item.price}
+                </span>
+                <span style={{width:'33%'}}>
+                  <Button
+                    onClick={()=> onDismiss(item.id,key)}
+                    className="button-inline"
+                  >
+                  Dismiss
+                  </Button>
+                </span>
+              </StyledRowDiv>
+
+            )
+          )
+      }
+    </div>
+
+const Button=({onClick,className='',children})=>
+  <StyledButton
+    onClick={onClick}
+    className={className}
+    type="button"
+  >
+    {children}
+  </StyledButton>
+
+const FinalTable=({pay,top,positive})=>
+
+  <div>
+    {
+      Object.keys(pay).map(item=>
+        <StyledFinalTableDiv>
+          <div>
+            {
+              item!==top()&& !positive().includes(item)&& pay[item]!==0&&
+              <span style={{width:'50%'}}>{item} > ${-pay[item].toFixed(2)} > {top()}</span>
+            }
+          </div>
+
+          <div>
+            {
+              item===top() && positive().filter(j=>j!==item).map(i=>
+                <div>
+                  <span style={{width:'50%'}}>{item} > ${pay[i].toFixed(2)} > {i}</span>
+                </div>
+              )
+            }
+          </div>
+        </StyledFinalTableDiv>
+      )
+    }
+  </div>
+
+const DetailsInput=({
+  nameInput,
+  costInput,
+  onNameChange,
+  onCostChange,
+  onSubmit,
+  children,
+  onGSTChange,
+  onServiceChange,
+  ClearStorage,})=>
+  <form onSubmit={onSubmit}>
+      <Input
+        required="required"
+        placeholder='Name'
+        type='text'
+        value={nameInput}
+        onChange={onNameChange}
+      />
+      <Input
+        required="required"
+        placeholder='Cost'
+        type='number'
+        step="0.01"
+        value={costInput}
+        onChange={onCostChange}
+      />
+
+      <StyledButton type='submit'>
+        {children}
+      </StyledButton>
+
+      <Button
+        onClick={ClearStorage}
+      >
+        Clear All
+      </Button>
+
+  </form>
+
+const Input=styled.input`
+  padding: 0.5em;
+  margin: 0.5em;
+  color: #49274A;
+  background: #F4DECB;
+  border: none;
+  border-radius: 3px;
+  font-size:1em;
+`;
+const H1=styled.h1`
+  color: #F8EEE7;
+  background: #626E60;
+  padding: 0.5em;
+  margin: 0.1em;
+  font-size: 3em;
+  font-family: Georgia, serif;
+  font-weight:normal;
+`
+const StyledButton=styled.button`
+  color: #F8EEE7;
+  background: #626E60;
+  margin: 0.5em;
+  padding:0.5em;
+`;
+const StyledTableDiv=styled.div`
+  display: flex;
+  line-height: 24px;
+  font-size: 1.5em;
+  padding: 1em;
+  justify-content: space-between;
+  text-align: center;
+  color: #626E60;
+`;
+
+const StyledFinalTableDiv=styled.div`
+  margin: 1em;
+  text-align: center;
+  flex-flow: column || wrap;
+  font-size: 20px;
+  color: #626E60;
+`;
+
+const StyledRowDiv=StyledTableDiv.extend`
+  background: #F4DECB;
+  font-size: 1.5em;
+  padding: 0em;
+  align-items: center;
+  color: #626E60;
+  margin: 0.5em;
+  border-radius: 5px;
+`
+const StyledPage=styled.div`
+  background: #F8EEE7;
+  border-radius: 5px;
+  margin: 2em;
+`
 
 class App extends Component {
 
   constructor(props){
     super(props);
 
-
-
-    this.state={
-      name:'',
-      cost:'',
-      results:{},
-      index:0,
-      final:{},
-      pay:{},
-    };
+    this.state=initialState;
 
     this.onNameChange=this.onNameChange.bind(this);
     this.onCostChange=this.onCostChange.bind(this);
@@ -35,12 +216,18 @@ class App extends Component {
     this.findTop=this.findTop.bind(this);
     this.findPositive=this.findPositive.bind(this);
     this.onSetResult=this.onSetResult.bind(this);
-
-
+    this.onGSTChange =this.onGSTChange.bind(this);
+    this.onServiceChange=this.onServiceChange.bind(this);
+    this.onClearStorage=this.onClearStorage.bind(this);
   }
 
   onSetResult=(results,key)=>{
     localStorage.setItem(key,JSON.stringify(results));
+  }
+
+  onClearStorage(){
+    localStorage.clear();
+    this.setState(initialState);
   }
 
   findTop(){
@@ -128,6 +315,18 @@ class App extends Component {
     });
   }
 
+  onGSTChange(event){
+    this.setState({
+      gst:event.target.checked,
+    },()=>this.calculateFinal())
+  }
+
+  onServiceChange(event){
+    this.setState({
+      service:event.target.checked,
+    },()=>this.calculateFinal())
+  }
+
   getTotalEach(){
     const{results,final}=this.state;
     var myfinal=final;
@@ -151,7 +350,9 @@ class App extends Component {
   }
 
   calculateFinal(){
-    const {final}=this.state;
+    const {final,gst,service}=this.state;
+    const gst_price=gst?1.07:1;
+    const service_price=service?1.10:1;
     var sum=0;
     var updatepay={};
     const count=Object.keys(final).length;
@@ -159,9 +360,9 @@ class App extends Component {
       sum+=final[key];
     })
 
-    const average=sum/count;
+    const average=(sum*service_price)*gst_price/count;
     Object.keys(final).forEach((key,index)=>{
-      updatepay={...updatepay,[key]:final[key]-average};
+      updatepay={...updatepay,[key]:(final[key]*service_price)*gst_price-average};
     })
     this.setState({
       pay:updatepay
@@ -185,15 +386,18 @@ class App extends Component {
 
     const {nameInput, costInput,results,pay}=this.state;
     return (
-      <div className='page'>
+      <StyledPage>
         <div className='interactions'>
-        <h1>Splitting Bills Made Easy</h1>
+        <H1>Splitting Bills Made Easy</H1>
           <DetailsInput
             nameInput={nameInput}
             costInput={costInput}
             onNameChange={this.onNameChange}
             onCostChange={this.onCostChange}
             onSubmit={this.onSubmit}
+            onGSTChange={this.onGSTChange}
+            onServiceChange={this.onServiceChange}
+            ClearStorage={this.onClearStorage}
           >
             Add
           </DetailsInput>
@@ -211,107 +415,9 @@ class App extends Component {
             onDismiss={this.onDismiss}
            />
          }
-      </div>
+      </StyledPage>
     );
   }
 }
-
-const Table=({results,onDismiss,pay})=>
-    <div className='table'>
-      {Object.keys(pay).length!==0 &&
-        <div className='table-header'>
-          <span style={{width:'33%'}}>
-            Name
-          </span>
-          <span style={{width:'33%'}}>
-          Paid
-          </span>
-          <span style={{width:'33%'}}>
-          Delete
-          </span>
-        </div>
-      }
-      {
-          Object.keys(results).map((key,index)=>
-            results[key].visits.map(item=>
-              <div key={item.id} className='table-row'>
-                <span style={{width:'33%'}}>
-                  {key}
-                </span>
-                <span style={{width:'33%'}}>
-                  ${item.price}
-                </span>
-                <span style={{width:'33%'}}>
-                  <Button
-                    onClick={()=> onDismiss(item.id,key)}
-                    className="button-inline"
-                  >
-                  Dismiss
-                  </Button>
-                </span>
-              </div>
-
-            )
-          )
-      }
-    </div>
-
-const Button=({onClick,className='',children})=>
-  <button
-    onClick={onClick}
-    className={className}
-    type="button"
-  >
-    {children}
-  </button>
-
-const FinalTable=({pay,top,positive})=>
-
-  <div className='table2'>
-    {
-      Object.keys(pay).map(item=>
-        <div>
-          <div>
-            {
-              item!==top()&& !positive().includes(item)&& pay[item]!==0&&
-              <span style={{width:'50%'}}>{item} --- ${-pay[item].toFixed(2)} ---> {top()}</span>
-            }
-          </div>
-
-          <div>
-            {
-              item===top() && positive().filter(j=>j!==item).map(i=>
-                <div>
-                  <span style={{width:'50%'}}>{item} --- ${pay[i].toFixed(2)} ---> {i}</span>
-                </div>
-              )
-            }
-          </div>
-        </div>
-      )
-    }
-  </div>
-
-const DetailsInput=({nameInput,costInput,onNameChange,onCostChange,onSubmit,children})=>
-  <form onSubmit={onSubmit}>
-      <input
-        required="required"
-        placeholder='Name'
-        type='text'
-        value={nameInput}
-        onChange={onNameChange}
-      />
-      <input
-        required="required"
-        placeholder='Cost'
-        type='number'
-        step="0.01"
-        value={costInput}
-        onChange={onCostChange}
-      />
-      <button type='submit'>
-        {children}
-      </button>
-  </form>
 
 export default App;
