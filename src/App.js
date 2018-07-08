@@ -130,15 +130,17 @@ const DetailsInput=({
         onChange={onCostChange}
       />
 
-      <StyledButton type='submit'>
-        {children}
-      </StyledButton>
+      <div>
+        <StyledButton type='submit'>
+          {children}
+        </StyledButton>
 
-      <Button
-        onClick={ClearStorage}
-      >
-        Clear All
-      </Button>
+        <Button
+          onClick={ClearStorage}
+        >
+          Clear All
+        </Button>
+      </div>
 
   </form>
 
@@ -196,7 +198,7 @@ const StyledRowDiv=StyledTableDiv.extend`
 const StyledPage=styled.div`
   background: #F8EEE7;
   border-radius: 5px;
-  margin: 2em;
+  margin: 1em;
 `
 
 class App extends Component {
